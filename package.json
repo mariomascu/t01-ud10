@@ -1,0 +1,24 @@
+{
+  "name": "t01-ud10",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariomascu/t01-ud10.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mariomascu/t01-ud10/issues"
+  },
+  "homepage": "https://github.com/mariomascu/t01-ud10#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

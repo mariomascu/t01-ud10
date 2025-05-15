@@ -1,0 +1,52 @@
+{
+  "clientes": [
+    {
+      "id": "1",
+      "nameCliente": "David",
+      "emailCliente": "david@bermudez.com",
+      "tlfnoCliente": "365565656",
+      "empresaCliente": "David Corporation inc."
+    },
+    {
+      "id": "3697",
+      "nameCliente": "juan",
+      "emailCliente": "juan@gmail.com",
+      "tlfnoCliente": "852963711",
+      "empresaCliente": "empresa de juan"
+    },
+    {
+      "id": "c8ea",
+      "nameCliente": "oliver",
+      "emailCliente": "oliver@suempresa.net",
+      "tlfnoCliente": "258963121",
+      "empresaCliente": "oliver s.a."
+    },
+    {
+      "id": "24e1",
+      "nameCliente": "Damián Fernández",
+      "emailCliente": "dfernandez@acme.com",
+      "tlfnoCliente": "987789852",
+      "empresaCliente": "Acme, Inc."
+    },
+    {
+      "id": "6b8e",
+      "nameCliente": "Almudena Fuentes",
+      "emailCliente": "afuentes@iestrassierra.com",
+      "tlfnoCliente": "123123852",
+      "empresaCliente": "IES Trassierra"
+    },
+    {
+      "id": "fc97",
+      "nameCliente": "Napoleón Bonaparte",
+      "emailCliente": "nbonaparte@vivelafrance.fr",
+      "tlfnoCliente": "777444777",
+      "empresaCliente": "Vive la France"
+    }
+  ],
+  "perro": [
+    {
+      "chip": "123",
+      "nombre": "Canuto"
+    }
+  ]
+}
