@@ -28,7 +28,7 @@ export const addCliente = async (cliente) => {
     },
     //body: datos que se pasan al servidor. En este caso es un objeto JSON con los datos del cliente
     //que se van a introducir en la base de datos.
-    body: JSON.stringify(cliente) 
+    body: JSON.stringify(cliente)
     
   };
   console.log(param);

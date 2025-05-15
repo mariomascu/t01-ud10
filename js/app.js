@@ -1,5 +1,4 @@
 "use strict";
-//Importamos  los métodos de la API para su uso en el controla
 
 import { addCliente, deleteCliente, getClientes, getCliente, updateCliente } from "./API.js";
 import { mensaje } from "./funciones.js";
