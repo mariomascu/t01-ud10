@@ -1,55 +1,26 @@
 "use strict";
 
-//Esta API funciona sobre el recurso CLIENTES que es la única tabla de la que disponemos en la base de datos.
-//como tenemos que hacer un uso reiterado de esta URL, creamos una variable para usarla cuando la necesitemos.
-//Esta URL es el endpoint que nos ofrece la api restful del lado del servidor (automatizada por json-server).
 const url = "http://localhost:3000/clientes";
-/*hay que crear el servidor en node  y modificar la ruta del servidor*/
 
-//La API es un módulo que contiene varias funciones por lo que estas funciones deben ser exportadas para poder
-//utilizarlas en un módulo externo.
-
-//FUNCIÓN ADDCLIENTE (Crud): El objetivo de esta función es añadir un cliente a la base de datos.
-//El acceso al servidor se realizará siempre de forma asíncrona para que la interacción del usuario con la app sea
-//fluída.
-//Para ello se crea una función async/await con fetch
-//Esta función recibe como parámetro de entrada una cadena
 export const addCliente = async (cliente) => {
-	//Definimos los parámetros de la solicitud en una constante para mayor claridad
 	console.log({ cliente });
 	const param = {
-		//Tipo de solicitud. Debe ser POST ya que estamos realizando una inserción.
 		method: "POST",
-		//headers: Establece el formato de los datos que se pasan al servidor en la opción body, en este caso están en la variable
-		//cliente que se ha recibido como parámetro de entrada.
-
 		headers: {
 			"Content-Type": "application/json",
 		},
-		//body: datos que se pasan al servidor. En este caso es un objeto JSON con los datos del cliente
-		//que se van a introducir en la base de datos.
 		body: JSON.stringify(cliente),
 	};
 	console.log(param);
-	//
+
 	try {
-		//Se realiza la solicutud en 2 pasos:
-		//- Paso 1: el primer await envía la solicutud al servidor lo cual crea una promesa que se resuelve en un objeto RESPONSE
 		const response = await fetch(url, param);
-		//Recordamos: La promesa generada por fetch no entra en estado rejected a no ser que haya un error de red o de autencación
-		//por tanto lo más conveniente es que nosotros constrolemos la situación.
 		if (response.ok) {
 			return { mensaje: "insertado" };
 		} else {
 			throw error;
 		}
 	} catch (error) {
-		//Si la solicitud no se resuelve con éxito, se devuelve un objeto con un campo mensaje que contiene una cadena
-		//indicativa del fracaso ("NO INSertado")
-		//LO QUE DEVUELVE LA FUNCIÓN DEPENDE DEL DISEÑO QUE REALICE EL PROGRAMADOR.
-		//EN ESTE CASO SE DEVUELVE UN MENSAJE TEXTUAL PERO SE PODRÍA INCLUIR, POR EJEMPLO, OTRO CAMPO EN ESTE OBJETO
-		//DEVUELTO CON UN CÓDIGO DE ERROR QUE PODRÍA SER MANEJADO DESDE LA APLICACIÓN.
-
 		return { mensaje: "NO insertado" };
 	}
 };

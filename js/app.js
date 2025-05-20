@@ -1,6 +1,6 @@
 "use strict";
 
-import { addCliente, deleteCliente, getClientes, getCliente, updateCliente } from "./API.js";
+import { addCliente, deleteCliente, getClientes, getCliente, updateCliente } from "./__API.js";
 import { mensaje } from "./funciones.js";
 
 let id;//Almacena el ID del cliente de la fila seleccionada cuando se pulsa un botón de acción en la fila

@@ -1,9 +1,8 @@
 body {
-    background: #5e3507;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #5e3507, #b49651);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #5e3507, #b49651); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
+    background: hsl(0, 14%, 99%);  /* fallback for old browsers */
+   /*  background: -webkit-linear-gradient(to right, #5e3507, #b49651);  
+    background: linear-gradient(to right, #5e3507, #b49651);  
+ */}
 h1, h2, p {
     font-family: 'Carrois Gothic SC', sans-serif;
     display: block;
@@ -38,8 +37,8 @@ p {
     font-size: 1rem;
 }
 #form-register, #capaPrincipal{
-    width:400px;
-    background: #703d02;
+    width: 400px;
+    background: #44d1f8;
     padding:30px;
     margin:auto; 
     margin-top:50px;
@@ -99,7 +98,7 @@ p {
 .radio{
     padding: 10px;  
     margin:16px 0; 
-    margin-left: 100px;
+    margin-left: 50px;
 }
 .check{
     padding:10px;  
