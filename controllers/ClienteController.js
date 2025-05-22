@@ -1,4 +1,5 @@
 "use strict";
+const db = require('../database/db');
 
 const url = "http://localhost:3000/clientes";
 

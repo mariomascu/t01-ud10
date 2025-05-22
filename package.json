@@ -17,9 +17,11 @@
     "url": "https://github.com/mariomascu/t01-ud10/issues"
   },
   "homepage": "https://github.com/mariomascu/t01-ud10#readme",
-  "description": "",
+  "description": "Ejercicio Node. Creación de API RESTful para gestión de clientes con Node.js, Express y MySQL",
   "dependencies": {
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "mysql": "^2.18.1",
     "mysql2": "^3.14.1",
     "nodemon": "^3.1.10"
   }

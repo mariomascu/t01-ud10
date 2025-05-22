@@ -41,12 +41,24 @@
       "emailCliente": "nbonaparte@vivelafrance.fr",
       "tlfnoCliente": "777444777",
       "empresaCliente": "Vive la France"
-    }
-  ],
-  "perro": [
+    },
     {
-      "chip": "123",
-      "nombre": "Canuto"
+      "id": null,
+      "nombre": "Mario",
+      "email": "mariod@bermudez.com",
+      "telefono": "365565656"
+    },
+    {
+      "id": null,
+      "nombre": "Benji Serrano",
+      "email": "benji@email.com",
+      "telefono": "12345678"
+    },
+    {
+      "nameCliente": "asdfasdf",
+      "emailCliente": "asdfasdf@email.com",
+      "tlfnoCliente": "12345678",
+      "empresaCliente": "mi empresa"
     }
   ]
 }
