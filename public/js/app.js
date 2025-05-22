@@ -54,7 +54,7 @@ const confFormulario = () => {
       $(element).addClass(validClass).removeClass(errorClass);
     },
     rules: {
-      nameCliente: "required",
+      nombreCliente: "required",
 
       emailCliente: {
         required: true,
@@ -92,7 +92,7 @@ const add = async () => {
 
   //Creamos el objeto JS para pasarlelo a la función que consume la AAPI Rest
   let cliente={
-    nameCliente:document.querySelector("#nameCliente").value,
+    nombreCliente:document.querySelector("#nombreCliente").value,
     emailCliente:document.querySelector("#emailCliente").value,
     tlfnoCliente:document.querySelector("#tlfnoCliente").value,
     empresaCliente:document.querySelector("#empresaCliente").value
@@ -132,7 +132,7 @@ const mostrarClientes = async () => {
     //cargar los clientes en la tabla
     clientes.data.forEach((cliente) => {
       $(".table tbody").append(
-        `<tr><td>${cliente.id}</td><td>${cliente.nameCliente}</td><td>${cliente.emailCliente}</td><td>${cliente.tlfnoCliente}</td><td>${cliente.empresaCliente}</td><td>${botAcc}</td></tr>`
+        `<tr><td>${cliente.id}</td><td>${cliente.nombreCliente}</td><td>${cliente.emailCliente}</td><td>${cliente.tlfnoCliente}</td><td>${cliente.empresaCliente}</td><td>${botAcc}</td></tr>`
       );
     });
     //establecer evento click a los botones de acción de cada fila
@@ -181,7 +181,7 @@ const actualizarCliente =async function()  {
   //mostrar la ventana modal
   $("#frmModal").modal("show");
   //cargar los datos en el formulario
-  document.querySelector("#nameCliente").value=datos.nameCliente;
+  document.querySelector("#nombreCliente").value=datos.nombreCliente;
   document.querySelector("#emailCliente").value=datos.emailCliente;
   document.querySelector("#tlfnoCliente").value=datos.tlfnoCliente;
   document.querySelector("#empresaCliente").value=datos.empresaCliente;
@@ -198,7 +198,7 @@ const grabarActCliente=async ()=>{
   //a partir de los datos introducidos.
    const cliente={
     'id':id,
-    'nameCliente':document.querySelector("#nameCliente").value,
+    'nombreCliente':document.querySelector("#nombreCliente").value,
     'emailCliente':document.querySelector("#emailCliente").value,
     'tlfnoCliente':document.querySelector("#tlfnoCliente").value,
     'empresaCliente': document.querySelector("#empresaCliente").value

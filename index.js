@@ -2,7 +2,8 @@
 
 import express from "express";
 import fs from 'fs/promises';
-import db from './database/db.js';
+import db from './database/db.js'; // Importa la conexión a la base de datos
+
 
 //creación del servidor con Express
 const app = express();
@@ -72,10 +73,10 @@ app.get('/clientes/:id', async (req, res) => {
 
 // POST /clientes - Crear un nuevo cliente
 app.post('/clientes', async (req, res) => {
-    const { nameCliente, emailCliente, tlfnoCliente, empresaCliente } = req.body;
+    const { nombreCliente, emailCliente, tlfnoCliente, empresaCliente } = req.body;
 	try {
-		const [result] = await db.query('INSERT INTO users (nameCliente, emailCliente, tlfnoCliente, empresaCliente) VALUES (?, ?)', [nameCliente, emailCliente, tlfnoCliente, empresaCliente]);
-		res.status(201).json({ id: result.insertId, nameCliente, emailCliente, tlfnoCliente, empresaCliente});
+		const [result] = await db.query('INSERT INTO clientes (nombreCliente, emailCliente, tlfnoCliente, empresaCliente) VALUES (?,?,?,?)', [nombreCliente, emailCliente, tlfnoCliente, empresaCliente]);
+		res.status(201).json({ nombreCliente, emailCliente, tlfnoCliente, empresaCliente});
 	} catch (error) {
 		res.status(500).json({ error: error.message });
 	}
