@@ -1,20 +1,29 @@
 "use strict";
 
 import express from "express";
-import db from './database/db.js'; // Conexión MySQL
+import cors from "cors";
+import db from './database/db.js';
 
 const app = express();
 const PORT = 3000;
 
+// Middleware
 app.use(express.json());
+app.use(cors()); // Importante para evitar problemas de CORS
 
 // Obtener todos los clientes
 app.get('/clientes', async (req, res) => {
     try {
         const [clientes] = await db.query('SELECT * FROM clientes');
-        res.json(clientes);
+        // Devolver directamente el array con estructura que espera el cliente
+        res.json({ 
+            data: clientes
+        });
     } catch (error) {
-        res.status(500).json({ error: 'Error al leer los clientes' });
+        res.status(500).json({ 
+            data: [],
+            error: 'Error al leer los clientes'
+        });
     }
 });
 
@@ -26,6 +35,7 @@ app.get('/clientes/:id', async (req, res) => {
         if (rows.length === 0) {
             return res.status(404).json({ error: 'Cliente no encontrado' });
         }
+        // Devolver directamente el cliente (como espera actualizarCliente)
         res.json(rows[0]);
     } catch (error) {
         res.status(500).json({ error: 'Error al buscar el cliente' });
@@ -40,9 +50,17 @@ app.post('/clientes', async (req, res) => {
             'INSERT INTO clientes (nombreCliente, emailCliente, tlfnoCliente, empresaCliente) VALUES (?,?,?,?)',
             [nombreCliente, emailCliente, tlfnoCliente, empresaCliente]
         );
-        res.status(201).json({ id: result.insertId, nombreCliente, emailCliente, tlfnoCliente, empresaCliente });
+        // El cliente espera un objeto con propiedad 'mensaje'
+        res.status(201).json({ 
+            mensaje: "insertado",
+            id: result.insertId, 
+            nombreCliente, 
+            emailCliente, 
+            tlfnoCliente, 
+            empresaCliente 
+        });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ mensaje: "error", error: error.message });
     }
 });
 
@@ -58,26 +76,28 @@ app.put('/clientes/:id', async (req, res) => {
         );
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Cliente no encontrado' });
+            return res.status(404).json({ mensaje: "error", error: 'Cliente no encontrado' });
         }
 
-        res.json({ message: 'Cliente actualizado correctamente' });
+        // El cliente espera un objeto con propiedad 'mensaje'
+        res.json({ mensaje: "actualizado" });
     } catch (error) {
-        res.status(500).json({ error: 'Error al actualizar el cliente' });
+        res.status(500).json({ mensaje: "error", error: 'Error al actualizar el cliente' });
     }
 });
 
-//Eliminar un cliente
+// Eliminar un cliente
 app.delete('/clientes/:id', async (req, res) => {
     const clienteId = parseInt(req.params.id);
     try {
         const [result] = await db.query('DELETE FROM clientes WHERE id = ?', [clienteId]);
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Cliente no encontrado' });
+            return res.status(404).json({ mensaje: "error", error: 'Cliente no encontrado' });
         }
-        res.json({ message: 'Cliente eliminado correctamente' });
+        // El cliente espera un objeto con propiedad 'mensaje'
+        res.json({ mensaje: "eliminado" });
     } catch (error) {
-        res.status(500).json({ error: 'Error al eliminar el cliente' });
+        res.status(500).json({ mensaje: "error", error: 'Error al eliminar el cliente' });
     }
 });
 

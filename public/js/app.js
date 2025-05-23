@@ -10,21 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
   mostrarClientes(); //cargar clientes en la tabla
   $(".addCliente").on("click",() => {
     //llamar a la ventana modal
-  //modificar los textos para que se muestre correctamente cuando la ventana modal se muestra
-  //para añadir un cliente.
+    //modificar los textos para que se muestre correctamente cuando la ventana modal se muestra
+    //para añadir un cliente.
       console.log("Configurando ventana modal para añadir...")
       document.querySelector(".modal-title").innerText="Añadir Cliente";
       document.querySelector(".submit").innerText="Insertar";
       $("#frmModal").modal("show");
   });
-  /* document.querySelector(".addCliente").addEventListener("click", () => {
-    //llamar a la ventana modal
-  //modificar los textos
-      document.querySelector(".modal-title").innerText="Añadir Cliente";
-      document.querySelector(".submit").innerText="Insertar";
-
-      $("#frmModal").modal("show");
-  }); */
 
    $("#frmModal").on("hidden.bs.modal",()=>{
       $("input").val("");
@@ -79,28 +71,21 @@ const confFormulario = () => {
   });
 };
 
-//Función que se ejecutará al hacer click sobre elbotón Insertar de la ventana modal
+//Función que se ejecutará al hacer click sobre el botón Insertar de la ventana modal
 //cuando esta ha sido configurada para añadir un nuevo cliente.
 const add = async () => {
-
-  //recoger los datos del formulario en formato urlencoded
-  //En el caso de consumir una API Rest que no trabaje con JSON sino con URL Encoded, 
-  //se puede obtener esa cadena con todos los campos del formulario y sus valores utilizando
-  //el método serialize()
-  //let clienteEncoded = $(".frmClientes").serialize();
-  //console.log(clienteEncoded);
-
-  //Creamos el objeto JS para pasarlelo a la función que consume la AAPI Rest
+  //Creamos el objeto JS para pasarselo a la función que consume la API Rest
   let cliente={
     nombreCliente:document.querySelector("#nombreCliente").value,
     emailCliente:document.querySelector("#emailCliente").value,
     tlfnoCliente:document.querySelector("#tlfnoCliente").value,
     empresaCliente:document.querySelector("#empresaCliente").value
   }
-  console.log(cliente);
+  console.log("Enviando cliente:", cliente);
   
   //llamar a addCliente en API.js
   const data = await addCliente(cliente);
+  console.log("Respuesta del servidor:", data);
 
   //limpiar formulario
   $("input").val("");
@@ -121,34 +106,57 @@ const mostrarClientes = async () => {
   const botAcc = `<button type='button' class='edit btn btn-success'><i class="fa-regular fa-pen-to-square"></i></button><button type='button' class='del btn btn-danger ms-2'><i class="fa-solid fa-trash"></i></button>`;
   //vaciar la tabla para borrar los datos y cargarlos de nuevo
   $(".table tbody").empty();
-  //cargar los clientes
-  //Como getClientes es una función async, la cual envuelve la función en una promesa, la llamada requiere
-  //del uso de await.
-  const clientes = await getClientes();
-  //La función getClientes devuelve un objeto definido por la propia función que contiene un campo data
-  //con los datos traídos desde el servidor
-  console.log(clientes);
-  if (clientes.data.length > 0) {
-    //cargar los clientes en la tabla
-    clientes.data.forEach((cliente) => {
+  
+  try {
+    //cargar los clientes
+    const clientes = await getClientes();
+    console.log("Datos recibidos en mostrarClientes:", clientes);
+    
+    // Verificar la estructura de datos recibida
+    let clientesArray;
+    if (clientes.data && Array.isArray(clientes.data.data)) {
+      // Si la estructura es {data: {data: [...], mensaje: "..."}}
+      clientesArray = clientes.data.data;
+    } else if (clientes.data && Array.isArray(clientes.data)) {
+      // Si la estructura es {data: [...]}
+      clientesArray = clientes.data;
+    } else if (Array.isArray(clientes)) {
+      // Si es directamente un array
+      clientesArray = clientes;
+    } else {
+      console.error("Estructura de datos no reconocida:", clientes);
+      clientesArray = [];
+    }
+    
+    console.log("Array de clientes a mostrar:", clientesArray);
+    
+    if (clientesArray.length > 0) {
+      //cargar los clientes en la tabla
+      clientesArray.forEach((cliente) => {
+        $(".table tbody").append(
+          `<tr><td>${cliente.id}</td><td>${cliente.nombreCliente}</td><td>${cliente.emailCliente}</td><td>${cliente.tlfnoCliente}</td><td>${cliente.empresaCliente}</td><td>${botAcc}</td></tr>`
+        );
+      });
+      //establecer evento click a los botones de acción de cada fila
+      $(".del").on("click", eliminarCliente);
+      $(".edit").on("click", actualizarCliente);
+    } else {
+      //Si no hay registros se indica con un mensaje en la tabla.
       $(".table tbody").append(
-        `<tr><td>${cliente.id}</td><td>${cliente.nombreCliente}</td><td>${cliente.emailCliente}</td><td>${cliente.tlfnoCliente}</td><td>${cliente.empresaCliente}</td><td>${botAcc}</td></tr>`
-      );
-    });
-    //establecer evento click a los botones de acción de cada fila
-    $(".del").on("click", eliminarCliente);
-    $(".edit").on("click", actualizarCliente);
-  } else {//Si no hay registros se indica con un mensaje en la tabla.
+        `<tr><td colspan=6 class="text-center">No hay registros</td></tr>`);
+    }
+  } catch (error) {
+    console.error("Error al cargar clientes:", error);
     $(".table tbody").append(
-      `<tr><td colspan=6 class="text-center">No hay registros</td></tr>`);
+      `<tr><td colspan=6 class="text-center">Error al cargar los datos</td></tr>`);
   }
 };
 
 //Función que asocia al botón de acción eliminar de la fila.
-const eliminarCliente =function()  {
+const eliminarCliente = function() {
   //Se extrae el id de la fila
   const id=this.parentNode.parentNode.firstChild.innerText;
-  console.log(id);
+  console.log("Eliminando cliente con ID:", id);
   //Se pide confirmación
   Swal.fire({
     title: "¿Desea eliminar el cliente?",
@@ -160,24 +168,31 @@ const eliminarCliente =function()  {
   }).then(async(result) => {
     if (result.isConfirmed) {
       //Función deleteCliente
-      const datos=await deleteCliente(id);
+      const datos = await deleteCliente(id);
+      console.log("Respuesta de eliminación:", datos);
+      if (datos.mensaje === "eliminado") {
+        mensaje("Cliente eliminado", "success");
+      } else {
+        mensaje("Error al eliminar cliente", "error");
+      }
       mostrarClientes();
-      
-      
     }
   });
 };
 
 //Función que carga los datos del cliente en la ventana modal para su actualización
-const actualizarCliente =async function()  {
+const actualizarCliente = async function() {
   //this=botón
   //1º parentNode: la columna que contiene el botón
   //2ª parentNode: la fila que contiene el botón.
   //firstChild: la columna que contiene el ID
    id=this.parentNode.parentNode.firstChild.innerText;
+   console.log("Cargando cliente con ID:", id);
 
   //cargar los datos del cliente
-  const datos= await getCliente(id);
+  const datos = await getCliente(id);
+  console.log("Datos del cliente:", datos);
+  
   //mostrar la ventana modal
   $("#frmModal").modal("show");
   //cargar los datos en el formulario
@@ -185,15 +200,15 @@ const actualizarCliente =async function()  {
   document.querySelector("#emailCliente").value=datos.emailCliente;
   document.querySelector("#tlfnoCliente").value=datos.tlfnoCliente;
   document.querySelector("#empresaCliente").value=datos.empresaCliente;
-//modificar los textos para que el usuario vea que está MODIFICANDO UN CLIENTE
-//(la misma ventana modal se utiliza para añadir clientes y se configura en ese caso
-//de manera diferente)
+  //modificar los textos para que el usuario vea que está MODIFICANDO UN CLIENTE
+  //(la misma ventana modal se utiliza para añadir clientes y se configura en ese caso
+  //de manera diferente)
   document.querySelector(".modal-title").innerText="Modificar Cliente";
   document.querySelector(".submit").innerText="Modificar";
 };
 
 //Esta función graba un cliente que se está actualizando.
-const grabarActCliente=async ()=>{
+const grabarActCliente = async () => {
   //Construimos el objeto que la función updateCliente requiere como parámetro de entrada
   //a partir de los datos introducidos.
    const cliente={
@@ -203,8 +218,12 @@ const grabarActCliente=async ()=>{
     'tlfnoCliente':document.querySelector("#tlfnoCliente").value,
     'empresaCliente': document.querySelector("#empresaCliente").value
    }
+   console.log("Actualizando cliente:", cliente);
+   
    //Llamamos a updateCliente que como es una función async requiere el uso de await
-   const datos= await updateCliente(cliente);
+   const datos = await updateCliente(cliente);
+   console.log("Respuesta de actualización:", datos);
+   
    //mostrar el mensaje
    if (datos.mensaje=="actualizado"){
     mensaje("Cliente actualizado", "success");
@@ -215,7 +234,4 @@ const grabarActCliente=async ()=>{
    //limpiar y cerrar formulario
    $("input").val("");
    $("#frmModal").modal("hide");
-
-   
-
 };
