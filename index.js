@@ -1,7 +1,7 @@
 "use strict";
 
 import express from "express";
-import db from './database/db.js'; // Conexión MySQL
+import db from './database/db.js';
 
 const app = express();
 const PORT = 3000;
