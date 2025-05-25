@@ -1,21 +1,22 @@
 "use strict";
 
+//importo las dependencias necesarias
 import express from "express";
 import cors from "cors";
 import db from './database/db.js';
 
-const app = express();
-const PORT = 3000;
+const app = express(); // creo una instancia de express
+const PORT = 3000; // Defino el puerto en el que se ejecutará el servidor
 
 // Middleware
 app.use(express.json());
-app.use(cors()); // Importante para evitar problemas de CORS
+app.use(cors()); // Importante para evitar que pete el CORS
 
 // Obtener todos los clientes
 app.get('/clientes', async (req, res) => {
     try {
         const [clientes] = await db.query('SELECT * FROM clientes');
-        // Devolver directamente el array con estructura que espera el cliente
+        
         res.json({ 
             data: clientes
         });
@@ -27,7 +28,7 @@ app.get('/clientes', async (req, res) => {
     }
 });
 
-// Obtener un cliente específico
+// obtención de un cliente específico
 app.get('/clientes/:id', async (req, res) => {
     const clienteId = parseInt(req.params.id);
     try {
@@ -42,7 +43,7 @@ app.get('/clientes/:id', async (req, res) => {
     }
 });
 
-// Crear un nuevo cliente
+// Creación de un nuevo cliente
 app.post('/clientes', async (req, res) => {
     const { nombreCliente, emailCliente, tlfnoCliente, empresaCliente } = req.body;
     try {
@@ -50,7 +51,7 @@ app.post('/clientes', async (req, res) => {
             'INSERT INTO clientes (nombreCliente, emailCliente, tlfnoCliente, empresaCliente) VALUES (?,?,?,?)',
             [nombreCliente, emailCliente, tlfnoCliente, empresaCliente]
         );
-        // El cliente espera un objeto con propiedad 'mensaje'
+      
         res.status(201).json({ 
             mensaje: "insertado",
             id: result.insertId, 
@@ -64,7 +65,7 @@ app.post('/clientes', async (req, res) => {
     }
 });
 
-// Actualizar un cliente
+// Actualización un cliente
 app.put('/clientes/:id', async (req, res) => {
     const clienteId = parseInt(req.params.id);
     const { nombreCliente, emailCliente, tlfnoCliente, empresaCliente } = req.body;
@@ -79,7 +80,6 @@ app.put('/clientes/:id', async (req, res) => {
             return res.status(404).json({ mensaje: "error", error: 'Cliente no encontrado' });
         }
 
-        // El cliente espera un objeto con propiedad 'mensaje'
         res.json({ mensaje: "actualizado" });
     } catch (error) {
         res.status(500).json({ mensaje: "error", error: 'Error al actualizar el cliente' });
@@ -94,7 +94,7 @@ app.delete('/clientes/:id', async (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).json({ mensaje: "error", error: 'Cliente no encontrado' });
         }
-        // El cliente espera un objeto con propiedad 'mensaje'
+      
         res.json({ mensaje: "eliminado" });
     } catch (error) {
         res.status(500).json({ mensaje: "error", error: 'Error al eliminar el cliente' });
